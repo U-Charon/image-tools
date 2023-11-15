@@ -1,20 +1,20 @@
+# 用于日常api、idea测试
+
 import tensorflow as tf
 import numpy as np
 
 
-
-
-
-def tf_box_filter(x, r):
-    ch = x.get_shape().as_list()[-1]
-    weight = 1 / ((2 * r + 1) ** 2)
-    box_kernel = weight * np.ones((2 * r + 1, 2 * r + 1, ch, 1))
-    box_kernel = np.array(box_kernel).astype(np.float32)
-    output = tf.nn.depthwise_conv2d(x, box_kernel, [1, 1, 1, 1], 'SAME')
-    return output
-
-
+#基于tf的
 def guided_filter(x, y, r, eps=1e-2):
+
+    def tf_box_filter(x, r):
+        ch = x.get_shape().as_list()[-1]
+        weight = 1 / ((2 * r + 1) ** 2)
+        box_kernel = weight * np.ones((2 * r + 1, 2 * r + 1, ch, 1))
+        box_kernel = np.array(box_kernel).astype(np.float32)
+        output = tf.nn.depthwise_conv2d(x, box_kernel, [1, 1, 1, 1], 'SAME')
+        return output
+
     x_shape = tf.shape(x)
     # y_shape = tf.shape(y)
     N = tf_box_filter(tf.ones((1, x_shape[1], x_shape[2], 1), dtype=x.dtype), r)
@@ -44,20 +44,19 @@ if __name__ == '__main__':
     # print(c.shape)
 
 
-    # x = tf.random.normal(shape=[1, 5, 5, 3])
-    # out = guided_filter(x, x, 1)
-    # print(out.shape)
+    x = tf.random.normal(shape=[1, 5, 5, 3])
+    out = guided_filter(x, x, 1)
+    print(out.shape)
 
-    y = np.convolve([1, 2, 3], [1, 0.5, 0], mode='same')
-    print(y)
-    inp = tf.cast([[[1, 2, 3],
-                    [1, 2, 3],
-                    [1, 2, 3]]],dtype=tf.float32)
-    print(inp.shape)
-    k = tf.cast([[[0],
-                  [0.5],
-                  [1]]], dtype=tf.float32)
-    print(k.shape)
-    y1 = tf.nn.conv1d(inp, filters=k, stride=[1, 1, 1], padding="SAME", data_format="NWC")
-
-    print(y1)
+    # # numpy的卷积过程 卷积核需要翻转设计
+    # y = np.convolve([1, 2, 3], [1, 0.5, 0], mode='same')
+    # print(y)
+    # # tf的卷积正常理解
+    # inp = tf.cast([[[1, 2, 3]]],dtype=tf.float32)
+    # print(inp.shape)
+    # k = tf.cast([[[0],
+    #               [0.5],
+    #               [1]]], dtype=tf.float32)
+    # print(k.shape)
+    # y1 = tf.nn.conv1d(inp, filters=k, stride=[1, 1, 1], padding="SAME", data_format="NWC")
+    # print(y1)
