@@ -31,7 +31,7 @@ def convolution_by_matrix(input_data, kernel_size=(3, 5), stride=2, conv_model='
         result_w = int(w / stride) + 1      
 
     if conv_model == 'min_pooling':
-        result = np.ones(shape=(result_h, result_w, c), dtype=np.float32)
+        result = np.ones(shape=(result_h, result_w, c), dtype=np.float32) * 255
     else:
         result = np.zeros(shape=(result_h, result_w, c), dtype=np.float32)
     
@@ -42,12 +42,12 @@ def convolution_by_matrix(input_data, kernel_size=(3, 5), stride=2, conv_model='
     padding_bottom = padding_h - padding_top
     padding_left = int(padding_w / 2)
     padding_right = padding_w - padding_left
-    print((padding_top, padding_bottom), (padding_left, padding_right))
+    # print((padding_top, padding_bottom), (padding_left, padding_right))
 
     input_padding = np.pad(input_data, 
                            ((padding_top, padding_bottom), (padding_left, padding_right), (0, 0)),
                            mode='reflect')
-    print('padding_shape:', input_padding.shape)
+    # print('padding_shape:', input_padding.shape)
 
     for i in range(kernel_size[0]):
         for j in range(kernel_size[1]):
@@ -70,7 +70,7 @@ def convolution_by_matrix(input_data, kernel_size=(3, 5), stride=2, conv_model='
 
 
 if __name__ == "__main__":
-    img_path = r"F:\data_analysis\Multiple_Auto-Adapting_Color_Balancing\img_balance_to_target\5m.tif"
+    img_path = r"F:\data_analysis\Color_Migration\Color_Migration_single\5m_simg.tif"
     # img_path = fr'/Users/wangbo/PycharmProjects/dataset/img_balance_to_target/target.tif'
     img_data = cv2.imread(img_path, -1)
     import time
