@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 
 
-#基于tf的
+#基于tf的导向滤波
 def guided_filter(x, y, r, eps=1e-2):
 
     def tf_box_filter(x, r):
